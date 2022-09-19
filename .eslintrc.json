@@ -1,0 +1,28 @@
+{
+    "plugins": ["simple-import-sort"],
+    "extends": [
+        "airbnb-typescript/base",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    ],
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "ignorePatterns": ["migrations/**", "**/*.js", "src/main.ts"],
+    "rules": {
+        "max-len": ["error", { "code": 120, "ignoreStrings": true }],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "sort-imports": "off",
+        "import/order": "off",
+        "@typescript-eslint/indent": ["error", 4, { "SwitchCase": 1 }],
+        "@typescript-eslint/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+        "@typescript-eslint/no-unnecessary-type-assertion": ["warn"],
+        "no-underscore-dangle": "off",
+        "implicit-arrow-linebreak": "off",
+        "import/prefer-default-export": "off",
+        "no-void": "off",
+        "class-methods-use-this": "off",
+        "max-classes-per-file": "off"
+    }
+}
