@@ -1,4 +1,4 @@
-import { Controller, HttpCode, HttpStatus, Post, Logger } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Post, Logger, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -10,6 +10,7 @@ import { BadRequestError, InternalServerError, UnauthorizedError } from '../../s
 import { ParserService } from './parser.service';
 import { TransactionsService } from '../transactions/transactions.service';
 import { AdapterCSVData, ADAPTER_TYPE_VERIFY } from './utils/convertData';
+import { AuthGuard } from '../../shared/guard/auth.guard';
 
 @ApiTags('CSV')
 @Controller('csv')
@@ -25,6 +26,7 @@ export class ParserController {
   @ApiUnauthorizedResponse({ type: UnauthorizedError })
   @ApiBadRequestResponse({ type: BadRequestError })
   @ApiInternalServerErrorResponse({ type: InternalServerError })
+  @UseGuards(AuthGuard)
   @Post('load')
   @HttpCode(HttpStatus.CREATED)
   async loadCsv(): Promise<void> {

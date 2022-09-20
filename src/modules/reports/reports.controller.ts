@@ -1,4 +1,4 @@
-import { Controller, HttpCode, HttpStatus, Get, Query } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Get, Query, UseGuards } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import {
   ApiBadRequestResponse,
@@ -9,6 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { ReportResponseDto, ReportQueryDto } from './dto';
 import { BadRequestError, InternalServerError, UnauthorizedError } from '../../shared/dto/errors';
+import { AuthGuard } from '../../shared/guard/auth.guard';
 
 @ApiTags('Reports')
 @Controller('reports')
@@ -21,9 +22,10 @@ export class ReportsController {
   @ApiUnauthorizedResponse({ type: UnauthorizedError })
   @ApiBadRequestResponse({ type: BadRequestError })
   @ApiInternalServerErrorResponse({ type: InternalServerError })
+  @UseGuards(AuthGuard)
   @Get('total')
   @HttpCode(HttpStatus.OK)
   async totalSumReport(@Query() query: ReportQueryDto): Promise<ReportResponseDto> {
-    return this.service.report(query)
+    return this.service.report(query);
   }
 }
