@@ -13,7 +13,6 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { TokenService } from './token/token.service';
 import {
   UnauthorizedError,
   BadRequestError,
@@ -31,7 +30,7 @@ export class AuthController {
     private readonly service: AuthService,
   ) {}
 
-  @ApiOperation({ description: 'Login for user' })
+  @ApiOperation({ description: 'Login for the user' })
   @ApiUnauthorizedResponse({ type: UnauthorizedError })
   @ApiBadRequestResponse({ type: BadRequestError })
   @ApiInternalServerErrorResponse({ type: InternalServerError })
@@ -46,7 +45,7 @@ export class AuthController {
   @ApiBadRequestResponse({ type: BadRequestError })
   @ApiInternalServerErrorResponse({ type: InternalServerError })
   @Post('registration')
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   registration(@Body() data: RegistrationRequestDto): Promise<Omit<UserEntity, 'password'>> {
     return this.service.registration(data)
   }

@@ -1,6 +1,11 @@
+export const ADAPTER_TYPE_VERIFY = {
+  DATE: 'date'
+}
+
 export class AdapterCSVData {
   private readonly data = [];
   private results = [];
+  private invalidData = [];
   private key;
   private columns;
 
@@ -17,12 +22,40 @@ export class AdapterCSVData {
     return this;
   }
 
+  verify(column: string, type: string) {
+    this.results = this.results.filter(item => {
+      if (type === ADAPTER_TYPE_VERIFY.DATE) {
+        return this.verifyDate(item[column])
+      }
+      return true;
+    });
+
+    return this;
+  }
+
   getColumns() {
     return this.columns;
   }
 
   getResults() {
     return this.results;
+  }
+
+  getInvalidData() {
+    return this.invalidData;
+  }
+
+  private verifyDate(date) {
+    if (!!Date.parse(date)) {
+      return true
+    }
+
+    this.invalidData.push({
+      type: ADAPTER_TYPE_VERIFY.DATE,
+      value: date
+    });
+
+    return false;
   }
 
   private exactColumns() {
