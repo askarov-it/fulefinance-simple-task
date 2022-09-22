@@ -15,16 +15,23 @@ export class ReportsService {
     const { date } = query;
 
     return this.transactionRepo.query(`
-        SELECT
+      WITH agg_transaction as (
+          SELECT sum(sum), source, date
+          FROM transactions
+          GROUP BY source, date
+      )
+      SELECT
           T.source,
-          json_build_object(
-              'total', to_json(SUM(T.sum)),
-              'date', to_json(to_char(T."date"::date, 'MM-YYYY'))
+          json_agg(
+              json_build_object(
+                  'total', to_json(T.sum),
+                  'date', to_json(to_char(T."date"::date, 'MM-YYYY'))
+              )
           ) as data
-        FROM transactions as T
-        ${!!date ? `WHERE T.date = '${date}'` : ''}
-        GROUP BY T."date", T.source
-        ORDER BY T.date::date DESC  
+      FROM agg_transaction as T
+      ${!!date ? `WHERE T.date = '${date}'` : ''}  
+      GROUP BY T.source
+      ORDER BY T.source DESC
     `);
   }
 }

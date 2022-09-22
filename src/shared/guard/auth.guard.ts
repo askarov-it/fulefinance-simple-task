@@ -17,10 +17,11 @@ export class AuthGuard implements CanActivate {
     }
 
     const { authorization } = request.headers;
-    const user = verify(authorization, process.env.ACCESS_TOKEN_KEY, (err) => {
+    const user = verify(authorization, process.env.ACCESS_TOKEN_KEY, (err, data) => {
       if (err) {
         throw new UnauthorizedException();
       }
+      return data
     });
 
     if (!user) {
